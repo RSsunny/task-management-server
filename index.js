@@ -46,12 +46,19 @@ async function run() {
 
     app.get("/api/v1/todo", async (req, res) => {
       try {
-        const result = await todoCollection.find().toArray();
+        const email = req?.query?.email;
+        let todoobj = {};
+        console.log(email);
+        if (email) {
+          todoobj.email = email;
+        }
+        const result = await todoCollection.find(todoobj).toArray();
         res.send({ status: true, data: result });
       } catch (error) {
         res.send({ status: false, data: [] });
       }
     });
+
     app.get("/api/v1/todo/:id", async (req, res) => {
       try {
         const id = req.params.id;
