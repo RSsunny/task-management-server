@@ -52,11 +52,23 @@ async function run() {
         res.send({ status: false, data: [] });
       }
     });
+    app.get("/api/v1/todo/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+
+        const query = { _id: new ObjectId(id) };
+        const result = await todoCollection.findOne(query);
+        res.send({ status: true, data: result });
+      } catch (error) {
+        res.send({ status: false, data: {} });
+      }
+    });
 
     app.patch("/api/v1/todo/:id", async (req, res) => {
       try {
         const id = req.params.id;
-        const query = { id: new ObjectId(id) };
+
+        const query = { _id: new ObjectId(id) };
         const data = req.body;
         const updateDoc = {
           $set: data,
@@ -70,8 +82,8 @@ async function run() {
     app.delete("/api/v1/todo/:id", async (req, res) => {
       try {
         const id = req.params.id;
-        const query = { id: new ObjectId(id) };
-
+        const query = { _id: new ObjectId(id) };
+        console.log(id);
         const result = await todoCollection.deleteOne(query);
         res.send({ status: true });
       } catch (error) {
